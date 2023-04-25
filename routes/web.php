@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Product;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
@@ -72,8 +73,6 @@ Route::middleware(['auth'])->group(function () {
 
     });
 
-    });
-
     //user
     //home
     Route::group(['prefix'=>'user', 'middleware' => 'user_auth'], function(){
@@ -88,4 +87,13 @@ Route::middleware(['auth'])->group(function () {
             Route::get('change', [UserController::class, 'accountChangePage'])->name('user#accountChangePage');
             Route::post('change/{id}', [UserController::class, 'accountChange'])->name('user#accountChange');
         });
+
+        Route::prefix('ajax')->group(function(){
+            Route::get('pizzaList', function(){
+                $data = Product::get();
+                return $data;
+            });
+        });
     });
+
+});

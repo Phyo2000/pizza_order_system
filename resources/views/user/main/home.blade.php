@@ -88,3 +88,18 @@
 </div>
 <!-- SHOP END -->
 @endsection
+
+@section('scriptSource')
+    <script>
+        $(document).ready(function(){
+            $.ajax({
+                type : 'get',
+                url : 'http://127.0.0.1:8000/user/ajax/pizzaList',
+                dataType : 'json',
+                success : function(response){
+
+                }
+            })
+        });
+    </script>
+@endsection
