@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\User\AjaxController;
 use App\Http\Controllers\User\UserController;
 
 /*
@@ -89,10 +90,7 @@ Route::middleware(['auth'])->group(function () {
         });
 
         Route::prefix('ajax')->group(function(){
-            Route::get('pizzaList', function(){
-                $data = Product::get();
-                return $data;
-            });
+            Route::post('pizza/list', [AjaxController::class, 'pizzaList'])->name("ajax#pizzaList");
         });
     });
 
