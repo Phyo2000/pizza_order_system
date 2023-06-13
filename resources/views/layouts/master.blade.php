@@ -82,7 +82,5 @@
 
 </body>
 
-@yield('scriptSource')
-
 </html>
 <!-- end document-->

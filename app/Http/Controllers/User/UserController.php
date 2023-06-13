@@ -56,6 +56,13 @@ class UserController extends Controller
         return view('user.profile.account');
     }
 
+    // filter pizza
+    public function filter($categoryId){
+        $pizza = Product::where('category_id', $categoryId)->orderBy('created_at', 'desc')->get();
+        $category = Category::get();
+        return view('user.main.home', compact('pizza', 'category'));
+    }
+
     //user account change
     public function accountChange($id,Request $request){
         $this->accountValidationCheck($request);
@@ -90,6 +97,13 @@ class UserController extends Controller
             'image' => 'mimes:png,jpg,jpeg|file',
             'address' => 'required',
         ])->validate();
+    }
+
+    // direct pizza details
+    public function pizzaDetails($pizzaId){
+        $pizza = Product::where('id', $pizzaId)->first();
+        $pizzaList = Product::get();
+        return view('user.main.details', compact('pizza', 'pizzaList'));
     }
 
     //request user data
