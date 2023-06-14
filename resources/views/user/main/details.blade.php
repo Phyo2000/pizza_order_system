@@ -22,6 +22,9 @@
             <div class="col-lg-7 h-auto mb-30 mt-3">
                 <div class="h-100 bg-light p-30">
                     <h3>{{ $pizza->name }}</h3>
+                    <input type="hidden" value="{{ Auth::user()->id }}" id="userId">
+                    <input type="hidden" value="{{ $pizza->id }}" id="pizzaId">
+
                     <div class="d-flex mb-3">
                         {{-- <div class="text-primary mr-2">
                             <small class="fas fa-star"></small>
@@ -37,18 +40,20 @@
                     <div class="d-flex align-items-center mb-4 pt-2">
                         <div class="input-group quantity mr-3" style="width: 130px;">
                             <div class="input-group-btn">
-                                <button class="btn btn-primary btn-minus">
+                                <button class="btn btn-warning btn-minus">
                                     <i class="fa fa-minus"></i>
                                 </button>
                             </div>
-                            <input type="text" class="form-control bg-secondary border-0 text-center" value="1">
+                            <input type="text" class="form-control border-0 text-center" id="orderCount" value="1"
+                                min="1" max="20">
                             <div class="input-group-btn">
-                                <button class="btn btn-primary btn-plus">
+                                <button class="btn btn-warning btn-plus">
                                     <i class="fa fa-plus"></i>
                                 </button>
                             </div>
                         </div>
-                        <button class="btn btn-primary px-3"><i class="fa fa-shopping-cart mr-1"></i> Add To
+                        <button type="button" class="btn btn-warning px-3" id="addCartBtn"><i
+                                class="fa fa-shopping-cart mr-1"></i> Add To
                             Cart</button>
                     </div>
                     <div class="d-flex pt-2">
@@ -86,20 +91,22 @@
                     @foreach ($pizzaList as $p)
                         <div class="product-item bg-light">
                             <div class="product-img position-relative overflow-hidden">
-                                <img class="img-fluid w-100" src="{{asset('storage/'.$p->image)}}" style="height: 300px" alt="">
+                                <img class="img-fluid w-100" src="{{ asset('storage/' . $p->image) }}" style="height: 300px"
+                                    alt="">
                                 <div class="product-action">
                                     <a class="btn btn-outline-dark btn-square" href=""><i
-                                        class="fa fa-shopping-cart"></i></a>
-                                <a class="btn btn-outline-dark btn-square" href=""><i
-                                        class="far fa-heart"></i></a>
-                                <a class="btn btn-outline-dark btn-square" href="{{route('user#pizzaDetails', $p->id)}}"><i
-                                        class="fa-solid fa-circle-info"></i></a>
+                                            class="fa fa-shopping-cart"></i></a>
+                                    <a class="btn btn-outline-dark btn-square" href=""><i
+                                            class="far fa-heart"></i></a>
+                                    <a class="btn btn-outline-dark btn-square"
+                                        href="{{ route('user#pizzaDetails', $p->id) }}"><i
+                                            class="fa-solid fa-circle-info"></i></a>
                                 </div>
                             </div>
                             <div class="text-center py-4">
-                                <a class="h6 text-decoration-none text-truncate" href="">{{$p->name}}</a>
+                                <a class="h6 text-decoration-none text-truncate" href="">{{ $p->name }}</a>
                                 <div class="d-flex align-items-center justify-content-center mt-2">
-                                    <h5>{{$p->price}} Kyats</h5>
+                                    <h5>{{ $p->price }} Kyats</h5>
                                     {{-- <h6 class="text-muted ml-2"><del>$123.00</del></h6> --}}
                                 </div>
                                 <div class="d-flex align-items-center justify-content-center mb-1">
@@ -119,4 +126,34 @@
         </div>
     </div>
     <!-- Products End -->
+@endsection
+
+@section('scriptSource')
+    <script>
+        $(document).ready(function() {
+            $('#addCartBtn').click(function() {
+
+                $source = {
+                    'userId': $('#userId').val(),
+                    'pizzaId': $('#pizzaId').val(),
+                    'count': $('#orderCount').val()
+                }
+
+
+                $.ajax({
+                    type: 'get',
+                    url: 'http://127.0.0.1:8000/user/ajax/addToCart',
+                    data: $source,
+                    dataType: 'json',
+                    success: function(response) {
+
+                        if (response.status == 'success') {
+                            window.location.href = "http://127.0.0.1:8000/user/home";
+                        }
+                    }
+                })
+
+            })
+        });
+    </script>
 @endsection
