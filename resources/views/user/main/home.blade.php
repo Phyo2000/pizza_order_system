@@ -50,8 +50,15 @@
                     <div class="col-12 pb-1">
                         <div class="d-flex align-items-center justify-content-between mb-4">
                             <div>
-                                <button class="btn btn-sm btn-light"><i class="fa fa-th-large"></i></button>
-                                <button class="btn btn-sm btn-light ms-2"><i class="fa fa-bars"></i></button>
+                                <a href="{{ route('user#cartList') }}">
+                                    <button type="button" class="btn bg-dark text-white position-relative">
+                                        <i class="fa-solid fa-cart-shopping"></i>
+                                        <span
+                                            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">
+                                            {{ count($cart) }}
+                                        </span>
+                                    </button>
+                                </a>
                             </div>
                             <div class="ms-2">
                                 <div class="btn-group">
@@ -66,36 +73,37 @@
                         </div>
                     </div>
                     <span id="dataList" class="row">
-                        @if(count($pizza) != 0)
-                        @foreach ($pizza as $p)
-                        <div class="col-lg-4 col-md-6 col-sm-6 pb-1">
-                            <div class="product-item bg-light mb-4" id="myForm">
-                                <div class="product-img position-relative overflow-hidden">
-                                    <img class="img-fluid w-100" style="height:250px"
-                                        src="{{ asset('storage/' . $p->image) }}" alt="product">
-                                    <div class="product-action">
-                                        <a class="btn btn-outline-dark btn-square" href=""><i
-                                                class="fa fa-shopping-cart"></i></a>
-                                        <a class="btn btn-outline-dark btn-square" href=""><i
-                                                class="far fa-heart"></i></a>
-                                        <a class="btn btn-outline-dark btn-square" href="{{route('user#pizzaDetails', $p->id)}}"><i
-                                                class="fa-solid fa-circle-info"></i></a>
-                                    </div>
-                                </div>
-                                <div class="text-center py-4">
-                                    <a class="h6 text-decoration-none text-truncate" href="">{{ $p->name }}</a>
-                                    <div class="d-flex align-items-center justify-content-center mt-2">
-                                        {{-- <h5>20000 kyats</h5><h6 class="text-muted ms-2"><del>25000</del></h6> --}}
-                                        <h5>{{ $p->price }} Kyats</h5>
-                                    </div>
-                                    {{-- <div class="d-flex align-items-center justify-content-center mb-1">
+                        @if (count($pizza) != 0)
+                            @foreach ($pizza as $p)
+                                <div class="col-lg-4 col-md-6 col-sm-6 pb-1">
+                                    <div class="product-item bg-light mb-4" id="myForm">
+                                        <div class="product-img position-relative overflow-hidden">
+                                            <img class="img-fluid w-100" style="height:250px"
+                                                src="{{ asset('storage/' . $p->image) }}" alt="product">
+                                            <div class="product-action">
+                                                <a class="btn btn-outline-dark btn-square" href=""><i
+                                                        class="fa fa-shopping-cart"></i></a>
+                                                <a class="btn btn-outline-dark btn-square" href=""><i
+                                                        class="far fa-heart"></i></a>
+                                                <a class="btn btn-outline-dark btn-square"
+                                                    href="{{ route('user#pizzaDetails', $p->id) }}"><i
+                                                        class="fa-solid fa-circle-info"></i></a>
+                                            </div>
+                                        </div>
+                                        <div class="text-center py-4">
+                                            <a class="h6 text-decoration-none text-truncate"
+                                                href="">{{ $p->name }}</a>
+                                            <div class="d-flex align-items-center justify-content-center mt-2">
+                                                {{-- <h5>20000 kyats</h5><h6 class="text-muted ms-2"><del>25000</del></h6> --}}
+                                                <h5>{{ $p->price }} Kyats</h5>
+                                            </div>
+                                            {{-- <div class="d-flex align-items-center justify-content-center mb-1">
                                     <small class="fa fa-star text-primary me-1"></small>
                                 </div> --}}
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                        @endforeach
-
+                            @endforeach
                         @else
                             <p class="text-center shadow-sm fs-5 col-6 offset-3 py-3">There is no pizza.</p>
                         @endif
@@ -111,17 +119,17 @@
 @section('scriptSource')
     <script>
         $(document).ready(function() {
-        //     $.ajax({
-        //         type : 'get',
-        //         url : 'http://127.0.0.1:8000/user/ajax/pizza/list',
-        //         dataType : 'json',
-        //         data : {
-        //             'status' : 'desc'
-        //         },
-        //         success : function(response){
-        //             console.log(response);
-        //         }
-        //     })
+            //     $.ajax({
+            //         type : 'get',
+            //         url : 'http://127.0.0.1:8000/user/ajax/pizza/list',
+            //         dataType : 'json',
+            //         data : {
+            //             'status' : 'desc'
+            //         },
+            //         success : function(response){
+            //             console.log(response);
+            //         }
+            //     })
 
             $('#sortingOption').change(function() {
                 $eventOption = $('#sortingOption').val();
@@ -199,6 +207,6 @@
                     })
                 }
             })
-         });
+        });
     </script>
 @endsection

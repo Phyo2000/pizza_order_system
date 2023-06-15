@@ -84,6 +84,10 @@ Route::middleware(['auth'])->group(function () {
             Route::get('details/{id}', [UserController::class, 'pizzaDetails'])->name('user#pizzaDetails');
         });
 
+        Route::prefix('cart')->group(function(){
+            Route::get('list', [UserController::class, 'cartList'])->name('user#cartList');
+        });
+
         Route::prefix('password')->group(function(){
             Route::get('change', [UserController::class, 'changePasswordPage'])->name('user#changePasswordPage');
             Route::post('change', [UserController::class, 'changePassword'])->name('user#changePassword');
