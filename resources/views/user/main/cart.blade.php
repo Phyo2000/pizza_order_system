@@ -17,38 +17,44 @@
                     </thead>
                     <tbody class="align-middle">
                         @foreach ($cartList as $c)
-                        <tr>
-                            <td class="align-middle"><img src="img/product-1.jpg" alt="" style="width: 50px;"> {{$c->pizza_name}}</td>
-                            <td class="align-middle">{{$c->pizza_price}} Kyats</td>
-                            <td class="align-middle">
-                                <div class="input-group quantity mx-auto" style="width: 100px;">
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-warning btn-minus" >
-                                        <i class="fa fa-minus"></i>
-                                        </button>
+                            <tr>
+                                <input type="hidden" value="{{ $c->pizza_price }}" id="price">
+                                <td class="align-middle"><img src="img/product-1.jpg" alt="" style="width: 50px;">
+                                    {{ $c->pizza_name }}</td>
+                                <td class="align-middle" id="pizzaPrice">{{ $c->pizza_price }} Kyats</td>
+                                <td class="align-middle">
+                                    <div class="input-group quantity mx-auto" style="width: 100px;">
+                                        <div class="input-group-btn">
+                                            <button class="btn btn-sm btn-warning btn-minus">
+                                                <i class="fa fa-minus"></i>
+                                            </button>
+                                        </div>
+                                        <input type="text" class="form-control form-control-sm border-0 text-center"
+                                            value="{{ $c->qty }}" id="qty">
+                                        <div class="input-group-btn">
+                                            <button class="btn btn-sm btn-warning btn-plus">
+                                                <i class="fa fa-plus"></i>
+                                            </button>
+                                        </div>
                                     </div>
-                                    <input type="text" class="form-control form-control-sm border-0 text-center" value="{{$c->qty}}">
-                                    <div class="input-group-btn">
-                                        <button class="btn btn-sm btn-warning btn-plus">
-                                            <i class="fa fa-plus"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="align-middle">{{$c->pizza_price * $c->qty}}</td>
-                            <td class="align-middle"><button class="btn btn-sm btn-danger"><i class="fa fa-times"></i></button></td>
-                        </tr>
+                                </td>
+                                <td class="align-middle" id="totalP">{{ $c->pizza_price * $c->qty }} Kyats</td>
+                                <input type="hidden" value="{{ $c->pizza_price * $c->qty }}" id="total">
+                                <td class="align-middle"><button class="btn btn-sm btn-danger btnRemove"><i
+                                            class="fa fa-times"></i></button></td>
+                            </tr>
                         @endforeach
                     </tbody>
                 </table>
             </div>
             <div class="col-lg-4">
-                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Cart Summary</span></h5>
+                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Cart
+                        Summary</span></h5>
                 <div class="bg-light p-30 mb-5">
                     <div class="border-bottom pb-2">
                         <div class="d-flex justify-content-between mb-3">
                             <h6>Subtotal</h6>
-                            <h6>{{$totalPrice}} Kyats</h6>
+                            <h6>{{ $totalPrice }} Kyats</h6>
                         </div>
                         <div class="d-flex justify-content-between">
                             <h6 class="font-weight-medium">Delivery</h6>
@@ -58,7 +64,7 @@
                     <div class="pt-2">
                         <div class="d-flex justify-content-between mt-2">
                             <h5>Total</h5>
-                            <h5>{{$totalPrice + 3000}} Kyats</h5>
+                            <h5>{{ $totalPrice + 3000 }} Kyats</h5>
                         </div>
                         <button class="btn btn-block btn-warning font-weight-bold my-3 py-3">Proceed To Checkout</button>
                     </div>
@@ -67,4 +73,37 @@
         </div>
     </div>
     <!-- Cart End -->
+@endsection
+
+@section('scriptSource')
+    <script>
+        $(document).ready(function() {
+            $('.btn-plus').click(function() {
+                $parentNode = $(this).parents("tr");
+                $price = $parentNode.find('#price').val();
+                $qty = Number($parentNode.find('#qty').val());
+
+                $total = $price * $qty;
+
+                $parentNode.find('#totalP').html($total + " Kyats");
+
+            })
+            $('.btn-minus').click(function() {
+                $parentNode = $(this).parents("tr");
+                $price = $parentNode.find('#price').val();
+                $qty = Number($parentNode.find('#qty').val());
+
+                $total = $price * $qty;
+
+                $parentNode.find('#totalP').html($total + " Kyats");
+
+            })
+
+            $('.btnRemove').click(function(){
+                $parentNode = $(this).parents("tr");
+                $parentNode.remove();
+            })
+
+        })
+    </script>
 @endsection
