@@ -62,7 +62,8 @@ class UserController extends Controller
     public function filter($categoryId){
         $pizza = Product::where('category_id', $categoryId)->orderBy('created_at', 'desc')->get();
         $category = Category::get();
-        return view('user.main.home', compact('pizza', 'category'));
+        $cart = Cart::where('user_id', Auth::user()->id)->get();
+        return view('user.main.home', compact('pizza', 'category', 'cart'));
     }
 
     //user account change
@@ -110,7 +111,7 @@ class UserController extends Controller
 
     //cart list
     public function cartList(){
-        $cartList = Cart::select('carts.*', 'products.name as pizza_name', 'products.price as pizza_price')
+        $cartList = Cart::select('carts.*', 'products.name as pizza_name', 'products.price as pizza_price', 'products.image as product_image')
                     ->leftJoin('products', 'products.id', 'carts.product_id')
                     ->where('user_id', Auth::user()->id)
                     ->get();
