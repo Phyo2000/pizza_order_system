@@ -145,11 +145,13 @@
 
             $.ajax({
                 type: 'get',
-                url: 'http://127.0.0.1:8000/user/ajax/pizza/list',
-                data: $orderList,
+                url: 'http://127.0.0.1:8000/user/ajax/order',
+                data: Object.assign({}, $orderList),
                 dataType: 'json',
                 success: function(response) {
-
+                    if(response.status == "true"){
+                        window.location.href = "http://127.0.0.1:8000/user/home";
+                    }
                 }
             })
         })
