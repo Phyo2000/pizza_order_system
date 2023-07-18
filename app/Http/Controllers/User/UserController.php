@@ -6,6 +6,7 @@ use Storage;
 use Carbon\Carbon;
 use App\Models\Cart;
 use App\Models\User;
+use App\Models\Order;
 use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Http\Request;
@@ -22,7 +23,8 @@ class UserController extends Controller
             ->get();
         $category = Category::get();
         $cart = Cart::where('user_id', Auth::user()->id)->get();
-        return view('user.main.home', compact('pizza', 'category', 'cart'));
+        $history = Order::where('user_id', Auth::user()->id)->get();
+        return view('user.main.home', compact('pizza', 'category', 'cart', 'history'));
     }
 
     // change password page
@@ -63,7 +65,8 @@ class UserController extends Controller
         $pizza = Product::where('category_id', $categoryId)->orderBy('created_at', 'desc')->get();
         $category = Category::get();
         $cart = Cart::where('user_id', Auth::user()->id)->get();
-        return view('user.main.home', compact('pizza', 'category', 'cart'));
+        $history = Order::where('user_id', Auth::user()->id)->get();
+        return view('user.main.home', compact('pizza', 'category', 'cart', 'history'));
     }
 
     //user account change
@@ -134,6 +137,12 @@ class UserController extends Controller
             'address' => $request->address,
             'updated_at' => Carbon::now()
         ];
+    }
+
+    // direct history page
+    public function history(){
+        $order = Order::where('user_id', Auth::user()->id)->orderBy('created_at', 'desc')->paginate('6');
+        return view('user.main.history', compact('order'));
     }
 
     //password validation check

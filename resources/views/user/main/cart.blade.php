@@ -22,9 +22,11 @@
                                 <td><img src="{{ asset('storage/' . $c->product_image) }}" alt=""
                                         class="img-thumbnail shadow-sm" style="width: 70px;"></td>
                                 <td class="align-middle">
-                                    {{ $c->pizza_name }} <input type="hidden" class="productId"
-                                        value="{{ $c->product_id }}"> <input type="hidden" class="userId"
-                                        value="{{ $c->user_id }}"> </td>
+                                    {{ $c->pizza_name }}
+                                    <input type="hidden" class="orderId" value="{{ $c->id }}"> <input type="hidden"
+                                        class="productId" value="{{ $c->product_id }}"> <input type="hidden" class="userId"
+                                        value="{{ $c->user_id }}">
+                                </td>
                                 <td class="align-middle" id="price">{{ $c->pizza_price }} Kyats</td>
                                 <td class="align-middle">
                                     <div class="input-group quantity mx-auto" style="width: 100px;">
@@ -72,6 +74,8 @@
                         </div>
                         <button class="btn btn-block btn-warning font-weight-bold my-3 py-3" id="orderBtn">Proceed To
                             Checkout</button>
+                        <button class="btn btn-block btn-danger font-weight-bold my-3 py-3" id="clearBtn">Clear Cart
+                        </button>
                     </div>
                 </div>
             </div>
@@ -104,14 +108,6 @@
                 $parentNode.find('#totalP').html($total + " Kyats");
 
                 summaryCalculation();
-            })
-
-            $('.btnRemove').click(function() {
-                $parentNode = $(this).parents("tr");
-                $parentNode.remove();
-
-                summaryCalculation();
-
             })
 
             function summaryCalculation() {
@@ -149,11 +145,55 @@
                 data: Object.assign({}, $orderList),
                 dataType: 'json',
                 success: function(response) {
-                    if(response.status == "true"){
+                    if (response.status == "true") {
                         window.location.href = "http://127.0.0.1:8000/user/home";
                     }
                 }
             })
+
+        })
+
+        // clear cart btn click
+        $('#clearBtn').click(function() {
+            $.ajax({
+                type: 'get',
+                url: 'http://127.0.0.1:8000/user/ajax/clear/cart',
+                dataType: 'json',
+            })
+
+            $('#dataTable tbody tr').remove();
+            $('#subTotalPrice').html("0 Kyats");
+            $('#finalPrice').html("3000 Kyats");
+
+        })
+
+        // remove current product
+        $('.btnRemove').click(function() {
+            $parentNode = $(this).parents("tr");
+            $productId = $parentNode.find(".productId").val();
+            $orderId = $parentNode.find(".orderId").val();
+
+            $.ajax({
+                type: 'get',
+                url: 'http://127.0.0.1:8000/user/ajax/clear/current/product',
+                data: {
+                    'productId': $productId,
+                    'orderId' : $orderId
+                },
+                dataType: 'json',
+            })
+
+            $parentNode.remove();
+
+            $totalPrice = 0;
+            $('#dataTable tr').each(function(index, row) {
+                $totalPrice += Number($(row).find('#totalP').text().replace("Kyats", ""));
+            });
+
+            $("#subTotalPrice").html(`${$totalPrice} Kyats`);
+            $("#finalPrice").html(`${$totalPrice + 3000} Kyats`);
+
+
         })
     </script>
 @endsection
