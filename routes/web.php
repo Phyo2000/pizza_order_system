@@ -4,6 +4,7 @@ use App\Models\Product;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\User\AjaxController;
@@ -70,6 +71,12 @@ Route::middleware(['auth'])->group(function () {
         Route::get('edit/{id}', [ProductController::class, 'edit'])->name('product#edit');
         Route::get('updatePage/{id}', [ProductController::class, 'updatePage'])->name('product#updatePage');
         Route::post('update', [ProductController::class, 'update'])->name('product#update');
+    });
+
+    // order
+    Route::prefix('order')->group(function(){
+        Route::get('list', [OrderController::class, 'orderList'])->name('admin#orderList');
+        Route::get('ajax/status', [OrderController::class, 'ajaxStatus'])->name('admin#ajaxStatus');
     });
 
     });
