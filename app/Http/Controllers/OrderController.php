@@ -32,4 +32,19 @@ class OrderController extends Controller
 
         return response()->json($order,200);
     }
+
+    // ajax change status
+    public function ajaxChangeStatus(Request $request){
+        Order::where('id', $request->orderId)->update([
+            'status' => $request->status
+        ]);
+
+        $order = Order::
+        select('orders.*', 'users.name as user_name')->leftJoin('users', 'users.id', 'orders.user_id')
+        ->orderBy('created_at', 'desc')
+        ->get();
+
+        return response()->json($order,200);
+
+    }
 }

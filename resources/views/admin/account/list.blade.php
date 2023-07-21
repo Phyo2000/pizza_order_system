@@ -108,7 +108,7 @@
 
                                             @else
                                             <a href="{{route('admin#changeRole', $a->id)}}">
-                                                <button class="item" data-toggle="tooltip" data-placement="top" title="Change Role">
+                                                <button class="item me-3" data-toggle="tooltip" data-placement="top" title="Change Role">
                                                     <i class="fa-solid fa-person-circle-minus me-1"></i>
                                                 </button>
                                             </a>

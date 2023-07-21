@@ -72,13 +72,14 @@
                                 <tbody id="dataList">
                                     @foreach ($order as $o)
                                         <tr class="tr-shadow">
+                                            <input type="hidden" class="orderId" value="{{ $o->id }}">
                                             <td>{{ $o->user_id }}</td>
                                             <td>{{ $o->user_name }}</td>
                                             <td>{{ $o->created_at->format('F j, Y') }}</td>
                                             <td>{{ $o->order_code }}</td>
                                             <td>{{ $o->total_price }} Kyats</td>
                                             <td>
-                                                <select name="status" class="form-control">
+                                                <select name="status" class="form-control statusChange">
                                                     <option value="0" @if ($o->status == 0) selected @endif
                                                         class="text-center">
                                                         Pending</option>
@@ -126,26 +127,69 @@
                     success: function(response) {
                         $list = '';
 
+                        $months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug',
+                            'Sep', 'Oct', 'Nov', 'Dec'
+                        ];
                         for ($i = 0; $i < response.length; $i++) {
+                            $dbDate = new Date(response[$i].created_at);
+                            $finalDate = $months[$dbDate.getMonth()] + " " + $dbDate.getDate() +
+                                ", " + $dbDate.getFullYear();
+
+                            if (response[$i].status == 0) {
+                                $statusMessage =
+                                    `
+                                <select name="status" class="form-control statusChange">
+                                                <option value="0"
+                                                    class="text-center" selected>
+                                                    Pending</option>
+                                                <option value="1"
+                                                    class="text-center">
+                                                    Accept</option>
+                                                <option value="2"
+                                                    class="text-center">
+                                                    Reject</option>
+                                </select>
+                                `;
+                            }else if(response[$i].status == 1){
+                                $statusMessage = `
+                                <select name="status" class="form-control statusChange">
+                                                <option value="0"
+                                                    class="text-center">
+                                                    Pending</option>
+                                                <option value="1"
+                                                    class="text-center" selected>
+                                                    Accept</option>
+                                                <option value="2"
+                                                    class="text-center">
+                                                    Reject</option>
+                                </select>
+                                `;
+                            }else if(response[$i].status == 2){
+                                $statusMessage = `
+                                <select name="status" class="form-control statusChange">
+                                                <option value="0"
+                                                    class="text-center">
+                                                    Pending</option>
+                                                <option value="1"
+                                                    class="text-center">
+                                                    Accept</option>
+                                                <option value="2"
+                                                    class="text-center" selected>
+                                                    Reject</option>
+                                </select>
+                                `;
+                            }
+
                             $list += `
                                 <tr class="tr-shadow">
+                                    <input type="hidden" class="orderId" value=" ${response[$i].id} ">
                                         <td> ${response[$i].user_id} </td>
                                         <td> ${response[$i].user_name} </td>
                                         <td> ${response[$i].created_at} </td>
                                         <td> ${response[$i].order_code} </td>
                                         <td> ${response[$i].total_price}  Kyats</td>
                                         <td>
-                                            <select name="status" class="form-control">
-                                                <option value="0" ${response[$i].status}
-                                                    class="text-center">
-                                                    Pending</option>
-                                                <option value="1" ${response[$i].status}
-                                                    class="text-center">
-                                                    Accept</option>
-                                                <option value="2" ${response[$i].status}
-                                                    class="text-center">
-                                                    Reject</option>
-                                            </select>
+                                            ${$statusMessage}
                                         </td>
                                     </tr>
                                 `;
@@ -154,6 +198,31 @@
 
                     }
                 })
+            })
+
+            // change status
+            $('.statusChange').change(function(){
+                // $parentNote = $(this).parents("tr");
+                // $price = Number($parentNote.find('#price').text().replace("Kyats"));
+                // $qty
+                $currentStatus = $(this).val();
+                $parentNote = $(this).parents("tr");
+                $orderId = $parentNote.find('.orderId').val();
+
+                $data = {
+                    'status' : $currentStatus,
+                    'orderId' : $orderId
+                };
+
+                console.log($data);
+
+                $.ajax({
+                    type : 'get',
+                    url : 'http://127.0.0.1:8000/order/ajax/change/status',
+                    data : $data,
+                    dataType : 'json',
+                })
+                // window.location.href = "http://127.0.0.1:8000/order/list";
 
             })
         });
