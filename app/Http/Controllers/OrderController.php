@@ -17,20 +17,19 @@ class OrderController extends Controller
     }
 
     // sort with ajax
-    public function ajaxStatus(Request $request){
+    public function changeStatus(Request $request){
         // $request->status = $request->status == null ? "" : $request->status;
-
         $order = Order::
         select('orders.*', 'users.name as user_name')->leftJoin('users', 'users.id', 'orders.user_id')
         ->orderBy('created_at', 'desc');
 
-        if($request->status == null){
+        if($request->orderStatus == null){
             $order = $order->get();
         }else{
-            $order = $order->where('orders.status', $request->status)->get();
+            $order = $order->where('orders.status', $request->orderStatus)->get();
         }
 
-        return response()->json($order,200);
+        return view('admin.order.list', compact('order'));
     }
 
     // ajax change status

@@ -46,15 +46,24 @@
                         </div>
                     </div>
 
-                    <div class="d-flex">
-                        <label for="" class="mt-2 me-4">Order Status</label>
-                        <select id="orderStatus" class="form-control col-1">
-                            <option value="">All</option>
-                            <option value="0">Pending</option>
-                            <option value="1">Accept</option>
-                            <option value="2">Reject</option>
-                        </select>
-                    </div>
+                    <form action="{{ route('admin#changeStatus') }}" method="get" class="col-5">
+                        @csrf
+                        <div class="input-group mb-3">
+
+                                <label for="" class="mt-2 me-4">Order Status</label>
+
+                                <select name="orderStatus" class="custom-select">
+                                    <option value="">All</option>
+                                    <option value="0" @if (request('orderStatus') == '0') selected @endif>Pending
+                                    </option>
+                                    <option value="1" @if (request('orderStatus') == '1') selected @endif>Accept</option>
+                                    <option value="2" @if (request('orderStatus') == '2') selected @endif>Reject</option>
+                                </select>
+                                <div class="input-group-append">
+                                    <button type="submit" class="btn btn-sm bg-dark text-white">Search</button>
+                                </div>
+                        </div>
+                    </form>
 
                     @if (count($order) != 0)
                         <div class="table-responsive table-responsive-data2">
@@ -150,7 +159,7 @@
                                                     Reject</option>
                                 </select>
                                 `;
-                            }else if(response[$i].status == 1){
+                            } else if (response[$i].status == 1) {
                                 $statusMessage = `
                                 <select name="status" class="form-control statusChange">
                                                 <option value="0"
@@ -164,7 +173,7 @@
                                                     Reject</option>
                                 </select>
                                 `;
-                            }else if(response[$i].status == 2){
+                            } else if (response[$i].status == 2) {
                                 $statusMessage = `
                                 <select name="status" class="form-control statusChange">
                                                 <option value="0"
@@ -201,7 +210,7 @@
             })
 
             // change status
-            $('.statusChange').change(function(){
+            $('.statusChange').change(function() {
                 // $parentNote = $(this).parents("tr");
                 // $price = Number($parentNote.find('#price').text().replace("Kyats"));
                 // $qty
@@ -210,17 +219,17 @@
                 $orderId = $parentNote.find('.orderId').val();
 
                 $data = {
-                    'status' : $currentStatus,
-                    'orderId' : $orderId
+                    'status': $currentStatus,
+                    'orderId': $orderId
                 };
 
                 console.log($data);
 
                 $.ajax({
-                    type : 'get',
-                    url : 'http://127.0.0.1:8000/order/ajax/change/status',
-                    data : $data,
-                    dataType : 'json',
+                    type: 'get',
+                    url: 'http://127.0.0.1:8000/order/ajax/change/status',
+                    data: $data,
+                    dataType: 'json',
                 })
                 // window.location.href = "http://127.0.0.1:8000/order/list";
 
