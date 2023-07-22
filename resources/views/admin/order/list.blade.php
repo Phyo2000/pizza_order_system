@@ -50,18 +50,18 @@
                         @csrf
                         <div class="input-group mb-3">
 
-                                <label for="" class="mt-2 me-4">Order Status</label>
+                            <label for="" class="mt-2 me-4">Order Status</label>
 
-                                <select name="orderStatus" class="custom-select">
-                                    <option value="">All</option>
-                                    <option value="0" @if (request('orderStatus') == '0') selected @endif>Pending
-                                    </option>
-                                    <option value="1" @if (request('orderStatus') == '1') selected @endif>Accept</option>
-                                    <option value="2" @if (request('orderStatus') == '2') selected @endif>Reject</option>
-                                </select>
-                                <div class="input-group-append">
-                                    <button type="submit" class="btn btn-sm bg-dark text-white">Search</button>
-                                </div>
+                            <select name="orderStatus" class="custom-select">
+                                <option value="">All</option>
+                                <option value="0" @if (request('orderStatus') == '0') selected @endif>Pending
+                                </option>
+                                <option value="1" @if (request('orderStatus') == '1') selected @endif>Accept</option>
+                                <option value="2" @if (request('orderStatus') == '2') selected @endif>Reject</option>
+                            </select>
+                            <div class="input-group-append">
+                                <button type="submit" class="btn btn-sm bg-dark text-white">Search</button>
+                            </div>
                         </div>
                     </form>
 
@@ -85,7 +85,8 @@
                                             <td>{{ $o->user_id }}</td>
                                             <td>{{ $o->user_name }}</td>
                                             <td>{{ $o->created_at->format('F j, Y') }}</td>
-                                            <td>{{ $o->order_code }}</td>
+                                            <td><a href="{{ route('admin#listInfo', $o->order_code) }}" class="text-danger">
+                                                    {{ $o->order_code }}</a></td>
                                             <td>{{ $o->total_price }} Kyats</td>
                                             <td>
                                                 <select name="status" class="form-control statusChange">
