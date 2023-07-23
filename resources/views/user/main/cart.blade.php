@@ -141,12 +141,12 @@
 
             $.ajax({
                 type: 'get',
-                url: 'http://127.0.0.1:8000/user/ajax/order',
+                url: '/user/ajax/order',
                 data: Object.assign({}, $orderList),
                 dataType: 'json',
                 success: function(response) {
                     if (response.status == "true") {
-                        window.location.href = "http://127.0.0.1:8000/user/home";
+                        window.location.href = "/user/home";
                     }
                 }
             })
@@ -157,7 +157,7 @@
         $('#clearBtn').click(function() {
             $.ajax({
                 type: 'get',
-                url: 'http://127.0.0.1:8000/user/ajax/clear/cart',
+                url: '/user/ajax/clear/cart',
                 dataType: 'json',
             })
 
@@ -175,7 +175,7 @@
 
             $.ajax({
                 type: 'get',
-                url: 'http://127.0.0.1:8000/user/ajax/clear/current/product',
+                url: '/user/ajax/clear/current/product',
                 data: {
                     'productId': $productId,
                     'orderId' : $orderId
