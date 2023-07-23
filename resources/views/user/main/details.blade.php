@@ -131,6 +131,16 @@
 @section('scriptSource')
     <script>
         $(document).ready(function() {
+
+            // increase view count
+            $.ajax({
+                    type: 'get',
+                    url: 'http://127.0.0.1:8000/user/ajax/increase/viewCount',
+                    data: { 'productId' : $('#pizzaId').val()},
+                    dataType: 'json',
+                })
+
+            // click add to cart btn
             $('#addCartBtn').click(function() {
 
                 $source = {
