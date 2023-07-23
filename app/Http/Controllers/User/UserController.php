@@ -27,6 +27,20 @@ class UserController extends Controller
         return view('user.main.home', compact('pizza', 'category', 'cart', 'history'));
     }
 
+    // direct user list page
+    public function userList(){
+        $users = User::where('role', 'user')->paginate('3');
+        return view('admin.user.list', compact('users'));
+    }
+
+    // change user role by admin
+    public function userChangeRole(Request $request){
+        $updateSource = [
+            'role' => $request->role
+        ];
+        User::where('id', $request->userId)->update($updateSource);
+    }
+
     // change password page
     public function changePasswordPage(){
         return view('user.password.change');
