@@ -85,6 +85,8 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('user')->group(function(){
         Route::get('list', [UserController::class, 'userList'])->name('admin#userList');
         Route::get('change/role', [UserController::class, 'userChangeRole'])->name('admin#userChangeRole');
+        Route::get('delete/{id}', [UserController::class, 'deleteUser'])->name('admin#deleteUser');
+
     });
 
 

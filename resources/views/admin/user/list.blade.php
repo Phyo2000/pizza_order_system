@@ -23,6 +23,7 @@
                                     <th>Phone</th>
                                     <th>Address</th>
                                     <th>Role</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody id="dataList">
@@ -48,6 +49,15 @@
                                                 <option value="user" @if ($user->role == 'user') selected @endif>User</option>
                                                 <option value="admin" @if ($user->role == 'admin') selected @endif>Admin</option>
                                             </select>
+                                        </td>
+                                        <td>
+                                            <div class="table-data-feature">
+                                                <a href="{{ route("admin#deleteUser", $user->id) }}">
+                                                    <button class="item" data-toggle="tooltip" data-placement="top" title="Delete">
+                                                        <i class="zmdi zmdi-delete"></i>
+                                                    </button>
+                                                </a>
+                                            </div>
                                         </td>
                                     </tr>
                                 @endforeach

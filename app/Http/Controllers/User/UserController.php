@@ -41,6 +41,12 @@ class UserController extends Controller
         User::where('id', $request->userId)->update($updateSource);
     }
 
+    // delete user
+    public function deleteUser($id){
+        User::where('id',$id)->delete();
+        return redirect()->route('admin#userList');
+    }
+
     // change password page
     public function changePasswordPage(){
         return view('user.password.change');
